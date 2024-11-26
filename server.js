@@ -13,8 +13,8 @@ const port = 3001 || 3000
 app.get("/",(req, res)=>{
     res.sendFile(path.join(__dirname,"business.html"))
 })
+ 
 
-  
 app.listen(port,()=>{
     console.log(`app is running on port:${port}`)
-})    
+})      

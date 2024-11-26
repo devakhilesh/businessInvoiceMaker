@@ -194,7 +194,6 @@
             margin-top: 5px;
         }
 
-    /* modified */
         .invoice-right {
             text-align: right;
             margin-bottom: 20px;
@@ -205,8 +204,33 @@
             font-weight: bold;
         }
 
+/* modified */
+      /* Top-right phone number */
+      .contact-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #b8860b; /* Golden color for the phone number */
+            display: flex;
+            align-items: center;
+        }
+
+             /* Phone icon using Unicode */
+             .contact-number::before {
+            content: "\260E"; /* Unicode for phone icon */
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+
+    .invoice-container {
+        position: relative; /* Needed to position contact number */
+        padding-top: 40px;  /* Adjust to avoid overlap with contact number */
+    }
 
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 </head>
 
 
@@ -273,9 +297,18 @@
         </table>
         <button onclick="addRow()">Add Row</button>
         <button onclick="generateInvoice()">Generate Invoice</button>
+        <button onclick="downloadPDF()">Download Invoice as PDF</button>
     </div>
 
     <div id="invoiceOutput" class="invoice-container" style="display:none;">
+        
+    <!-- Contact Number at Top-Right -->
+
+        <div class="contact-number">
+            Contact : (+91) 9918906006
+        </div>
+        
+        
         <h1>Anchal Jewellers</h1>
         <div class="business-details">
             <p>Birupur Haluwa Basti</p>
@@ -340,8 +373,8 @@
             document.getElementById(`value${rowNum}`).value = value.toFixed(2);
 
             // Calculate Amount (Value + Net Wt. * Making Charges)
-    const amount = value + (netWt * makingCharges);
-    document.getElementById(`amount${rowNum}`).value = amount.toFixed(2);
+             const amount = value + (netWt * makingCharges);
+             document.getElementById(`amount${rowNum}`).value = amount.toFixed(2);
        
        
         }
@@ -418,6 +451,32 @@
             if (number < 1000) return a[Math.floor(number / 100)] + ' hundred ' + (number % 100 ? numberToWords(number % 100) : '');
             return number.toString(); // Basic conversion
         }
+
+        function downloadPDF() {
+            const element = document.getElementById('invoiceOutput');
+            const opt = {
+                margin: 1,
+                filename: `AnchalJewellers_Invoice.pdf.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        }
+
+//         function downloadPDF() {
+//     const element = document.getElementById("invoiceOutput");
+//     const options = {
+//         margin:       1,
+//         filename:     'AnchalJewellers_Invoice.pdf',
+//         image:        { type: 'jpeg', quality: 0.98 },
+//         html2canvas:  { scale: 2 },
+//         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+//     };
+//     html2pdf().set(options).from(element).save();
+// }
+
+
     </script>
 
 </body>
