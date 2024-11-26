@@ -453,16 +453,34 @@
         }
 
         function downloadPDF() {
-            const element = document.getElementById('invoiceOutput');
-            const opt = {
-                margin: 1,
-                filename: `AnchalJewellers_Invoice.pdf.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf().from(element).set(opt).save();
+    const element = document.getElementById('invoiceOutput');
+
+    // Temporarily modify CSS to prevent wrapping
+    const style = document.createElement('style');
+    style.textContent = `
+        #outputTable th, #outputTable td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+    `;
+    document.head.appendChild(style);
+
+    const opt = {
+        margin: 1,
+        filename: `AnchalJewellers_Invoice.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a2', orientation: 'portrait' }
+    };
+
+    // Generate PDF
+    html2pdf().from(element).set(opt).save();
+
+    // Remove temporary style
+    document.head.removeChild(style);
+}
+
 
 //         function downloadPDF() {
 //     const element = document.getElementById("invoiceOutput");
